@@ -36,8 +36,7 @@
       gridWithSnake[x][y] = "snake";
     });
   }
-  onMount(() => {
-    const fn = (n: number) => {
+  const fn = (n: number) => {
       setTimeout(() => {
         const [x, y] = snakePosition[SNAKE_HEAD];
         const [dx, dy] = direction;
@@ -72,8 +71,17 @@
         fn(TICK_DELAY - Math.min(snakePosition.length, 15) * 10);
       }, n);
     };
+  onMount(() => {
     fn(TICK_DELAY);
   });
+
+  function restart() {
+		snakePosition = [[12, 13]];
+		direction = [0, 1];
+		gridWithSnake = grid;
+		lost = false;
+		fn(TICK_DELAY);
+	}
 </script>
 
 <style>
@@ -102,6 +110,9 @@
   .tcenter {
     text-align: center;
   }
+  .restart {
+		margin-top: 10px;
+	}
 </style>
 
 <svelte:window
@@ -135,4 +146,12 @@
       {/each}
     </div>
   </div>
+
+  {#if lost}
+  <div class="center restart">
+    <button on:click={restart}>
+      Start again
+    </button>
+  </div>
+  {/if}
 </main>
