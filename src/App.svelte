@@ -37,51 +37,51 @@
     });
   }
   const fn = (n: number) => {
-      setTimeout(() => {
-        const [x, y] = snakePosition[SNAKE_HEAD];
-        const [dx, dy] = direction;
-        const newHead = [dx + x, y + dy] as [number, number];
+    setTimeout(() => {
+      const [x, y] = snakePosition[SNAKE_HEAD];
+      const [dx, dy] = direction;
+      const newHead = [dx + x, y + dy] as [number, number];
 
-        function isOutOfBounds(n: number) {
-          return n < 0 || n > GRID_SIZE - 1;
-        }
+      function isOutOfBounds(n: number) {
+        return n < 0 || n > GRID_SIZE - 1;
+      }
 
-        if (isOutOfBounds(newHead[0]) || isOutOfBounds(newHead[1])) {
-          lost = true;
-          return;
-        }
+      if (isOutOfBounds(newHead[0]) || isOutOfBounds(newHead[1])) {
+        lost = true;
+        return;
+      }
 
-        let ateFood = false;
-        if (gridWithSnake[newHead[0]][newHead[1]] === "food") {
-          ateFood = true;
-          randomFood();
-        }
+      let ateFood = false;
+      if (gridWithSnake[newHead[0]][newHead[1]] === "food") {
+        ateFood = true;
+        randomFood();
+      }
 
-        const snakeBody = snakePosition.slice(
-          0,
-          snakePosition.length - (ateFood ? 0 : 1)
-        );
+      const snakeBody = snakePosition.slice(
+        0,
+        snakePosition.length - (ateFood ? 0 : 1)
+      );
 
-        if (snakeBody.some((x) => x[0] === newHead[0] && x[1] === newHead[1])) {
-          lost = true;
-          return;
-        }
+      if (snakeBody.some((x) => x[0] === newHead[0] && x[1] === newHead[1])) {
+        lost = true;
+        return;
+      }
 
-        snakePosition = [newHead, ...snakeBody];
-        fn(TICK_DELAY - Math.min(snakePosition.length, 15) * 10);
-      }, n);
-    };
+      snakePosition = [newHead, ...snakeBody];
+      fn(TICK_DELAY - Math.min(snakePosition.length, 15) * 10);
+    }, n);
+  };
   onMount(() => {
     fn(TICK_DELAY);
   });
 
   function restart() {
-		snakePosition = [[12, 13]];
-		direction = [0, 1];
-		gridWithSnake = grid;
-		lost = false;
-		fn(TICK_DELAY);
-	}
+    snakePosition = [[12, 13]];
+    direction = [0, 1];
+    gridWithSnake = grid;
+    lost = false;
+    fn(TICK_DELAY);
+  }
 </script>
 
 <style>
@@ -111,28 +111,44 @@
     text-align: center;
   }
   .restart {
-		margin-top: 10px;
-	}
+    margin-top: 10px;
+  }
+
+  .enter {
+    border: #000 1px solid;
+    background-color: #eee;
+    border-radius: 2px;
+    padding: 5px;
+  }
 </style>
 
 <svelte:window
   on:keydown={(e) => {
-    if (e.key === 'ArrowLeft') {
-      direction = [0, -1];
-    } else if (e.key === 'ArrowRight') {
-      direction = [0, 1];
-    } else if (e.key === 'ArrowUp') {
-      direction = [-1, 0];
-    } else if (e.key === 'ArrowDown') {
-      direction = [1, 0];
+    switch (e.key) {
+      case 'ArrowLeft':
+        direction = [0, -1];
+        break;
+      case 'ArrowRight':
+        direction = [0, 1];
+        break;
+      case 'ArrowUp':
+        direction = [-1, 0];
+        break;
+      case 'ArrowDown':
+        direction = [1, 0];
+        break;
+      case 'Enter':
+        restart();
+        break;
     }
   }} />
 
 <main>
   {#if lost}
     <h1 class="tcenter">you lost</h1>
+    <h3 class="tcenter">Hit <code class="enter">ENTER</code> to restart</h3>
   {/if}
-  <h1 class="tcenter">snake length {snakePosition.length}</h1>
+  <h3 class="tcenter">snake length {snakePosition.length}</h3>
   <div class="center">
     <div>
       {#each gridWithSnake as row, i}
@@ -148,10 +164,8 @@
   </div>
 
   {#if lost}
-  <div class="center restart">
-    <button on:click={restart}>
-      Start again
-    </button>
-  </div>
+    <div class="center restart">
+      <button on:click={restart}> Start again </button>
+    </div>
   {/if}
 </main>
