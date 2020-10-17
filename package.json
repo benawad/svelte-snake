@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rollup -c",
-    "dev": "HOST=0.0.0.0 PORT=6000 && rollup -c -w",
+    "dev": "rollup -c -w",
     "start": "sirv public",
     "validate": "svelte-check"
   },
