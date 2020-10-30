@@ -78,7 +78,11 @@
   function restart() {
     snakePosition = [[12, 13]];
     direction = [0, 1];
+    grid = [...Array(GRID_SIZE)].map(() =>
+      [...Array(GRID_SIZE)].map(() => "empty")
+    );
     gridWithSnake = grid;
+    randomFood();
     lost = false;
     fn(TICK_DELAY);
   }
