@@ -127,20 +127,28 @@
 </style>
 
 <svelte:window
-  on:keydown={(e) => {
+  on:keydown={(e) => {    
     switch (e.key) {
+      case 'a':
       case 'ArrowLeft':
         direction = [0, -1];
         break;
+
+      case 'd':
       case 'ArrowRight':
         direction = [0, 1];
         break;
+
+      case 'w':
       case 'ArrowUp':
         direction = [-1, 0];
         break;
+
+      case 's':
       case 'ArrowDown':
         direction = [1, 0];
         break;
+
       case 'Enter':
         restart();
         break;
