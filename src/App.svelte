@@ -127,9 +127,7 @@
 </style>
 
 <svelte:window
-  on:keydown={(e) => {
-    console.log(e.key);
-    
+  on:keydown={(e) => {    
     switch (e.key) {
       case 'a':
       case 'ArrowLeft':
